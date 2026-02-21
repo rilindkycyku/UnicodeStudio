@@ -1,16 +1,37 @@
-# React + Vite
+# Unicode Studio - Platinum Edition by Rilind Kyçyku
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projekti është i tipit **Text Styling** dhe **Unicode Transformation Engine**.
 
-Currently, two official plugins are available:
+Ky projekt është i punuar në:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React JS** - Frontend
+- **Framer Motion** - Animacionet
+- **Lucide React** - Ikonat
+- **Vanilla CSS** – Stilimi (Custom Platinum Design)
 
-## React Compiler
+# Informata rreth Funksioneve, Konfigurimit dhe Pamjes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Funksionet
 
-## Expanding the ESLint configuration
+- **Real-Time Rendition** - Konvertimi i tekstit bëhet në kohë reale ndërsa përdoruesi shkruan, pa pasur nevojë për rifreskim të faqes.
+- **Breathing Ambient UI** - Një sistem vizual dinamik me gradientë që lëvizin dhe efekte "light sweep" që i japin aplikacionit një ndjesi premium.
+- **Draft Station** - Një hapësirë pune e dedikuar me numërues të saktë të shkronjave dhe limite të paracaktuara për rrjetet sociale (Facebook, Instagram, etj.).
+- **Platinum Copy System** - Sistem i avancuar i kopjimit me indikatorë "Pill-status" dhe konfirmim vizual për çdo aksion.
+- **Sistemi i Filtrave/Modeleve** - Mundëson kërkimin dhe zgjedhjen e stilit Unicode përmes shkurtores **CTRL + K**.
+- **Mobile Optimized** - Ndërfaqe plotësisht e optimizuar për përdorim në pajisje mobile, duke ruajtur kompaktësinë dhe estetitkën "Platinum".
+- **Holographic Scanlines** - Efekt vizual retro-tech mbi të gjithë ekranin që përforcon stilin e terminalit të sofistikuar.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Konfigurimi
+
+Së pari duhet të bëni **clone** repozitorin dhe pastaj të hapni projektin në Visual Studio Code. Hapni terminalin dhe ekzekutoni këto komanda:
+
+- **npm install** - Bën instalimin automatik të paketave të nevojshme (React, Framer Motion, Lucide).
+- **npm run dev** - Bën startimin e projektit në ambientin e zhvillimit.
+- **npm run build** - Bën Build projektin për versionin e publikimit (production).
+
+_Shënim: Sigurohuni që keni Node.js të instaluar në sistemin tuaj përpara se të filloni._
+
+## Pamja e Unicode Studio
+
+![](ReadMeImages/pamja.png)
+
