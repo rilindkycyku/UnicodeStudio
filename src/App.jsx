@@ -16,10 +16,13 @@ import {
   SearchCode,
   Layout,
   Clock,
-  Command
+  Command,
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react';
 import { toUnicodeStyle, availableStyles } from './utils/textConverter';
 import templatesData from './data/templates.json';
+import Footer from './components/Footer';
 
 // Configuration for Social Limits
 const SOCIAL_LIMITS = [
@@ -38,6 +41,22 @@ export default function App() {
   // Local Storage States
   const [history, setHistory] = useState([]);
   const [myTemplates, setMyTemplates] = useState([]);
+  const [expandedCategories, setExpandedCategories] = useState(['Sans']);
+
+  // Group styles by category
+  const groupedStyles = useMemo(() => {
+    return availableStyles.reduce((acc, style) => {
+      if (!acc[style.category]) acc[style.category] = [];
+      acc[style.category].push(style);
+      return acc;
+    }, {});
+  }, []);
+
+  const toggleCategory = (cat) => {
+    setExpandedCategories(prev =>
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  };
 
   // Initialization
   useEffect(() => {
@@ -127,17 +146,53 @@ export default function App() {
                     <Palette size={12} /> Style Hub
                   </h3>
                 </div>
-                <div className="style-grid-xl">
-                  {availableStyles.map(s => (
-                    <button
-                      key={s.id}
-                      className={`style-chip ${selectedStyle === s.id ? 'active' : ''}`}
-                      onClick={() => setSelectedStyle(s.id)}
-                    >
-                      <span className="preview">{s.preview}</span>
-                      <span className="name">{s.name}</span>
-                    </button>
-                  ))}
+
+                <div className="space-y-1 mt-2">
+                  {Object.entries(groupedStyles).map(([category, styles]) => {
+                    const isExpanded = expandedCategories.includes(category);
+                    return (
+                      <div key={category} className="category-group">
+                        <button
+                          onClick={() => toggleCategory(category)}
+                          className={`category-trigger ${isExpanded ? 'expanded' : ''}`}
+                        >
+                          <span>{category}</span>
+                          {isExpanded ? (
+                            <ChevronDown size={12} className="icon" />
+                          ) : (
+                            <ChevronRight size={12} className="icon" />
+                          )}
+                        </button>
+
+                        <AnimatePresence initial={false}>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2, ease: "easeInOut" }}
+                              className="overflow-hidden"
+                            >
+                              <div className="collapsible-content">
+                                <div className="flex flex-col gap-1 mt-1">
+                                  {styles.map(s => (
+                                    <button
+                                      key={s.id}
+                                      className={`style-row-chip ${selectedStyle === s.id ? 'active' : ''}`}
+                                      onClick={() => setSelectedStyle(s.id)}
+                                    >
+                                      <span className="name">{s.name}</span>
+                                      <span className="preview">{s.preview}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -241,6 +296,7 @@ export default function App() {
                 </div>
               </div>
 
+              <Footer />
             </div>
           </div>
         </aside>

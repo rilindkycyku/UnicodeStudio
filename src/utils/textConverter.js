@@ -62,11 +62,11 @@ export function toUnicodeStyle(text, styleId = 'sans-bold') {
 export const toSansBold = toUnicodeStyle;
 
 export const availableStyles = [
-  { id: 'sans-bold', name: 'Sans Bold', preview: '𝗕𝗼𝗹𝗱' },
-  { id: 'sans-bold-italic', name: 'Sans Bold Italic', preview: '𝘽𝙤𝙡𝙙' },
-  { id: 'script-bold', name: 'Script Bold', preview: '𝓑𝓸𝓵𝓭' },
-  { id: 'double-struck', name: 'Outline', preview: '𝔹𝕠𝕝𝕕' },
-  { id: 'monospace', name: 'Monospace', preview: '𝙼𝚘𝚗𝚘' },
-  { id: 'bubbles', name: 'Bubbles', preview: 'Ⓑⓤⓑ' },
-  { id: 'strikethrough', name: 'Strike', preview: 'S̶t̶r̶' }
+  { id: 'sans-bold', name: 'Sans Bold', preview: '𝗕𝗼𝗹𝗱', category: 'Sans' },
+  { id: 'sans-bold-italic', name: 'Sans Bold Italic', preview: '𝘽𝙤𝙡𝙙', category: 'Sans' },
+  { id: 'script-bold', name: 'Script Bold', preview: '𝓑𝓸𝓵𝓭', category: 'Decorative' },
+  { id: 'double-struck', name: 'Outline', preview: '𝔹𝕠𝕝𝕕', category: 'Decorative' },
+  { id: 'monospace', name: 'Monospace', preview: '𝙼𝚘𝚗𝚘', category: 'Monospace' },
+  { id: 'bubbles', name: 'Bubbles', preview: 'Ⓑⓤⓑ', category: 'Experimental' },
+  { id: 'strikethrough', name: 'Strike', preview: 'S̶t̶r̶', category: 'Experimental' }
 ];
