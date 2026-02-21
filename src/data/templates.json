@@ -1,0 +1,77 @@
+[
+  {
+    "category": "Daily Offers",
+    "templates": [
+      {
+        "id": 1,
+        "title": "Pemë dhe Perime",
+        "content": "Oferta Ditore në Pemë dhe Perime të Freskëta me Super Çmime \n\nVetëm Nesër\nE Premte - 0 Nëntor\n\nJu Mirëpresim në Supermarketin “Besa” - Përballë Xhamisë, Kaçanik"
+      },
+      {
+        "id": 6,
+        "title": "Produkte 99 Cent",
+        "content": "Super Oferta Ditore në Supermarketin \"Besa\"  \n\nVetëm Nesër\nE Premte - 12 Dhjetor\n\nProdukte të përzgjedhura, çmim unik - vetëm 99 cent!   \nMos e humbisni këtë super mundësi - ejani dhe kurseni shumë! 🛒💥\n\nJu mirëpresim 🛒  \nSupermarketin \"Besa\" - Përballë Xhamisë, Kaçanik"
+      }
+    ]
+  },
+  {
+    "category": "Weekly Offers",
+    "templates": [
+      {
+        "id": 2,
+        "title": "Zbritje Javore",
+        "content": "Super Oferta me Zbritje në Supermarketin “Besa”\n\nOfertat vlejnë nga data\n02 Shkurt - 07 Shkurt\n\nJu mirëpresim 🛒\nSupermarketi “Besa” - Përballë Xhamisë, Kaçanik\n\n#kacanik #supermarketibesa #kaqanik"
+      }
+    ]
+  },
+  {
+    "category": "Ramadan & Eid",
+    "templates": [
+      {
+        "id": 3,
+        "title": "Oferta e Ramazanit",
+        "content": "Oferta e Ramazanit në Supermarketin “Besa”\n\nOfertat vlejnë nga data\n17 - 20 Shkurt\n\nJu Mirëpresim në Supermarketin “Besa” - Përballë Xhamisë, Kaçanik dhe Urime muaji i shenjtë i Ramazanit, ju dëshirojmë agjërim të lehtë 🕌\n\n#kacanik #supermarketibesa #kaqanik"
+      },
+      {
+        "id": 7,
+        "title": "Fitër Bajrami",
+        "content": "Oferta e Fitër Bajramit në Supermarketin “Besa”\n\nOfertat vlejnë nga data\n26 Mars deri më 31 Mars\n\nJu mirëpresim dhe Me Fat Festa e Fitër Bajramit.\nJu dëshirojmë Agjërim të pranuar 🤲\nSupermarketin “Besa” - Përballë Xhamisë, Kaçanik🛒"
+      },
+      {
+        "id": 9,
+        "title": "Urime Ramazani",
+        "content": "Urime Muaji i Shenjtë i Ramazanit\n\nJu urojmë agjërim sa më të lehtë nga Stafi i Supermarketit \"Besa\" - Përballë Xhamisë"
+      }
+    ]
+  },
+  {
+    "category": "Seasonal & Festive",
+    "templates": [
+      {
+        "id": 5,
+        "title": "Festat e Fundvitit",
+        "content": "Oferta Festive me Super Çmime të Lira\n\nOfertat vlejnë\n25 - 27 Dhjetor\n\nJu Mirëpresim në Supermarketin “Besa” - Përballë Xhamisë, Kaçanik dhe Urime Festat e Fundvitit 🎄🎅🎁"
+      },
+      {
+        "id": 10,
+        "title": "Lule 7 & 8 Marsi",
+        "content": "𝗟𝘂𝗹𝗲 𝘁𝗲̈ 𝗻𝗱𝗿𝘆𝘀𝗵𝗺𝗲 𝗽𝗲̈𝗿 𝗳𝗲𝘀𝘁𝗲̈𝗻 𝗲 𝟳 𝗱𝗵𝗲 𝟴 𝗠𝗮𝗿𝘀𝗶𝘁 𝗻𝗲̈ 𝗦𝘂𝗽𝗲𝗿𝗺𝗮𝗿𝗸𝗲𝘁𝗶𝗻 \"𝗕𝗲𝘀𝗮\" - 𝗣𝗲̈𝗿𝗯𝗮𝗹𝗹𝗲̈ 𝗫𝗵𝗮𝗺𝗶𝘀𝗲̈  \n\n𝗝𝘂 𝗺𝗶𝗿𝗲̈𝗽𝗿𝗲𝘀𝗶𝗺 🛒🌹🌷"
+      }
+    ]
+  },
+  {
+    "category": "Others",
+    "templates": [
+      {
+        "id": 4,
+        "title": "Produkte të Reja",
+        "content": "🛒 PRODUKTE TË REJA NË SUPERMARKETIN \"BESA\" - PËRBALLË XHAMISË KAÇANIK! 🔥  \n\nRaftet tona sot u mbushën plot me risi super të freskëta dhe cilësore!  \nShumë produkte të reja, te shijshme dhe të përzgjedhura me kujdes sapo mbërritën posaçërisht per ju!  \n\nEjani t’i zbuloni të parët – freskia dhe cilësia më e mirë gjenden vetem tek \"Besa\"! 💛  \n\nJu presim me zemër në Supermarketin “Besa” - Përballë Xhamisë, Kaçanik!"
+      },
+      {
+        "id": 8,
+        "title": "Konkurs Pune",
+        "content": "Konkurs Pune\n\nPozita të Lira: 1\nSektori: Arkatar/e\n\nPërparësi kanë punëtorët që kanë përvojë pune në pozitën e kërkuar\n\nTë interesuarit të lajmërohen tek Supermarketi “Besa” - Përballë Xhamisë, Kaçanik\n\nAfati i Aplikimit:\nNga data 02.10.23 deri 07.10.23"
+      }
+    ]
+  }
+]
