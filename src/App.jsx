@@ -16,19 +16,28 @@ import {
   SearchCode,
   Layout,
   Clock,
-  Command,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Lock,
+  Unlock,
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
 import { toUnicodeStyle, availableStyles } from './utils/textConverter';
 import templatesData from './data/templates.json';
 import Footer from './components/Footer';
+import logo from './assets/brand-logo.png';
 
 // Configuration for Social Limits
 const SOCIAL_LIMITS = [
   { name: 'FB Post', limit: 250, color: 'text-emerald-400' },
   { name: 'FB Ad', limit: 125, color: 'text-blue-400' },
   { name: 'Insta', limit: 2200, color: 'text-purple-400' }
+];
+
+const MOCKUP_TEMPLATES = [
+  { id: 'm1', title: 'Creative Draft', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+  { id: 'm2', title: 'Viral Hook', content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' }
 ];
 
 export default function App() {
@@ -42,6 +51,12 @@ export default function App() {
   const [history, setHistory] = useState([]);
   const [myTemplates, setMyTemplates] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState(['Sans']);
+  const [isLibraryUnlocked, setIsLibraryUnlocked] = useState(false);
+  const [unlockedTemplates, setUnlockedTemplates] = useState([]);
+  const [modalMode, setModalMode] = useState("unlock"); // "unlock" | "lock"
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [authCode, setAuthCode] = useState("");
+  const [authError, setAuthError] = useState(false);
 
   // Group styles by category
   const groupedStyles = useMemo(() => {
@@ -62,8 +77,12 @@ export default function App() {
   useEffect(() => {
     const savedHistory = JSON.parse(localStorage.getItem('studio_history') || '[]');
     const savedTemplates = JSON.parse(localStorage.getItem('studio_custom') || '[]');
+    const savedUnlocked = JSON.parse(localStorage.getItem('studio_unlocked') || '[]');
+    const libraryState = JSON.parse(localStorage.getItem('studio_lib_state') || 'false');
     setHistory(savedHistory);
     setMyTemplates(savedTemplates);
+    setUnlockedTemplates(savedUnlocked);
+    setIsLibraryUnlocked(libraryState);
   }, []);
 
   // Persist Changes
@@ -74,6 +93,14 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('studio_custom', JSON.stringify(myTemplates));
   }, [myTemplates]);
+
+  useEffect(() => {
+    localStorage.setItem('studio_unlocked', JSON.stringify(unlockedTemplates));
+  }, [unlockedTemplates]);
+
+  useEffect(() => {
+    localStorage.setItem('studio_lib_state', JSON.stringify(isLibraryUnlocked));
+  }, [isLibraryUnlocked]);
 
   // Template Logic
   const allTemplates = useMemo(() => templatesData.flatMap(c => c.templates), []);
@@ -114,7 +141,37 @@ export default function App() {
     setMyTemplates(prev => [newTpl, ...prev]);
   };
 
+  const handleUnlock = () => {
+    if (modalMode === "lock") {
+      setIsLibraryUnlocked(false);
+      setIsModalOpen(false);
+      return;
+    }
+    if (authCode === (import.meta.env.VITE_UNLOCK_KEY)) {
+      setIsLibraryUnlocked(true);
+      const lockedIds = allTemplates.filter(t => t.isLocked).map(t => t.id);
+      setUnlockedTemplates(prev => Array.from(new Set([...prev, ...lockedIds])));
+      setIsModalOpen(false);
+      setAuthCode("");
+      setAuthError(false);
+    } else {
+      setAuthError(true);
+      setTimeout(() => setAuthError(false), 500);
+    }
+  };
+
   const select = (tpl) => {
+    if (tpl.isLocked && !unlockedTemplates.includes(tpl.id)) {
+      const pass = prompt("Enter password to unlock this template:");
+      if (pass === tpl.password) {
+        setUnlockedTemplates(prev => [...prev, tpl.id]);
+        setActiveTemplate(tpl.id);
+        setInputText(tpl.content);
+      } else {
+        alert("Incorrect password!");
+      }
+      return;
+    }
     setActiveTemplate(tpl.id);
     setInputText(tpl.content);
   };
@@ -129,12 +186,13 @@ export default function App() {
         {/* --- NAVIGATION SIDEBAR --- */}
         <aside className="sidebar animate-up">
           <div className="glass-panel" style={{ height: '100%' }}>
-            <div className="panel-header" style={{ background: 'rgba(255,255,255,0.02)' }}>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-                  <Command size={18} className="text-emerald-400" />
-                </div>
-                <h2 className="text-sm font-black uppercase tracking-widest text-white/90">Unicode Studio</h2>
+            <div className="brand-zone">
+              <div className="logo-wrapper">
+                <img src={logo} alt="Unicode Studio" className="brand-logo" />
+              </div>
+              <div className="brand-text">
+                <h1 className="brand-main">Unicode</h1>
+                <h1 className="brand-sub">Studio</h1>
               </div>
             </div>
 
@@ -202,20 +260,43 @@ export default function App() {
                   <h3 className="tag-label">
                     <Star size={12} /> My Gallery
                   </h3>
-                  <button
-                    onClick={handleSaveTemplate}
-                    disabled={!inputText.trim()}
-                    className="btn-icon btn-emerald disabled:opacity-20"
-                    title="Save current as template"
-                  >
-                    <PlusCircle size={16} />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      className={`btn-icon ${isLibraryUnlocked ? 'btn-red' : 'btn-emerald'}`}
+                      onClick={() => {
+                        if (isLibraryUnlocked) {
+                          setModalMode("lock");
+                          setIsModalOpen(true);
+                        } else {
+                          setModalMode("unlock");
+                          setIsModalOpen(true);
+                        }
+                      }}
+                      title={isLibraryUnlocked ? "Secure Vault" : "Access Private Gallery"}
+                    >
+                      {isLibraryUnlocked ? <Unlock size={16} /> : <Lock size={16} />}
+                    </button>
+                    <button
+                      onClick={handleSaveTemplate}
+                      disabled={!inputText.trim()}
+                      className="btn-icon btn-emerald disabled:opacity-20"
+                      title="Save current as template"
+                    >
+                      <PlusCircle size={16} />
+                    </button>
+                  </div>
                 </div>
                 <div className="tpl-stack">
                   {myTemplates.length === 0 ? (
-                    <div className="p-4 rounded-xl border border-dashed border-white/5 text-center opacity-30 text-xs">
-                      Gallery is empty
-                    </div>
+                    MOCKUP_TEMPLATES.map(tpl => (
+                      <div key={tpl.id} className="tpl-card opacity-40 grayscale" onClick={() => select(tpl)}>
+                        <div className="flex justify-between items-start">
+                          <h4>{tpl.title}</h4>
+                          <span className="text-[8px] font-black uppercase text-white/20">Mockup</span>
+                        </div>
+                        <p>{tpl.content}</p>
+                      </div>
+                    ))
                   ) : (
                     myTemplates.map(tpl => (
                       <div key={tpl.id} className={`tpl-card ${activeTemplate === tpl.id ? 'active' : ''}`} onClick={() => select(tpl)}>
@@ -235,41 +316,55 @@ export default function App() {
                 </div>
               </div>
 
-              {/* BROWSE OFFICIAL */}
-              <div className="section">
-                <div className="section-header">
-                  <h3 className="tag-label">
-                    <SearchCode size={12} /> Models
-                  </h3>
-                  {!searchTerm && (
-                    <div className="search-hint">
-                      <span>CTRL</span>
-                      <span>K</span>
+              {/* PRIVATE GALLERY - STEALTH REVEAL */}
+              <AnimatePresence>
+                {isLibraryUnlocked && (
+                  <motion.div
+                    className="section mt-12 animate-up"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                  >
+                    <div className="section-header">
+                      <h3 className="tag-label">
+                        <SearchCode size={12} /> Private
+                      </h3>
+                      <div className="flex items-center gap-1.5">
+                        <div className="px-1.5 py-0.5 rounded bg-emerald-400/10 border border-emerald-400/20 text-[8px] font-black text-emerald-400 uppercase tracking-widest">
+                          Authorized
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className="search-field">
-                  <Search size={16} className="search-icon-left" />
-                  <input
-                    placeholder="Find a template..."
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                  />
-                  {searchTerm && (
-                    <button className="clear-search-btn" onClick={() => setSearchTerm("")}>
-                      <X size={14} />
-                    </button>
-                  )}
-                </div>
-                <div className="tpl-stack mt-4">
-                  {filteredTemplates.map(tpl => (
-                    <div key={tpl.id} className={`tpl-card ${activeTemplate === tpl.id ? 'active' : ''}`} onClick={() => select(tpl)}>
-                      <h4>{tpl.title}</h4>
-                      <p>{tpl.content}</p>
+
+                    <div className="search-field">
+                      <Search size={16} className="search-icon-left" />
+                      <input
+                        placeholder="Find a template..."
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                      />
+                      {searchTerm && (
+                        <button className="clear-search-btn" onClick={() => setSearchTerm("")}>
+                          <X size={14} />
+                        </button>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </div>
+
+                    <div className="tpl-stack mt-4">
+                      {filteredTemplates.map(tpl => (
+                        <div
+                          key={tpl.id}
+                          className={`tpl-card ${activeTemplate === tpl.id ? 'active' : ''}`}
+                          onClick={() => select(tpl)}
+                        >
+                          <h4>{tpl.title}</h4>
+                          <p>{tpl.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* RECENT ACTIONS */}
               <div className="section">
@@ -409,6 +504,90 @@ export default function App() {
           </AnimatePresence>
         </main>
       </div>
+
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="modal-root">
+            <motion.div
+              className="modal-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+            />
+            <motion.div
+              className={`modal-container ${authError ? 'shake' : ''}`}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            >
+              <div className="modal-header">
+                <div className="modal-icon-group">
+                  {modalMode === "unlock" ? (
+                    <ShieldCheck size={20} className="text-emerald-400" />
+                  ) : (
+                    <Lock size={20} className="text-red-400" />
+                  )}
+                  <span className="text-[10px] font-black uppercase text-white/40 tracking-[0.2em]">
+                    {modalMode === "unlock" ? "Security Protocol" : "Access Termination"}
+                  </span>
+                </div>
+                <button className="modal-close" onClick={() => setIsModalOpen(false)}>
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="modal-body">
+                <h3>{modalMode === "unlock" ? "Authorize Private Gallery" : "Lock Private Gallery"}</h3>
+                <p>
+                  {modalMode === "unlock"
+                    ? "Please enter your access code to reveal secured professional templates."
+                    : "Are you sure you want to lock the private gallery and secure the professional templates?"
+                  }
+                </p>
+
+                {modalMode === "unlock" && (
+                  <div className="modal-input-group">
+                    <Lock size={16} className={`input-icon ${authError ? 'text-red-400' : 'text-emerald-400/40'}`} />
+                    <input
+                      type="password"
+                      placeholder="ENTER ACCESS CODE"
+                      value={authCode}
+                      onChange={(e) => setAuthCode(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
+                      autoFocus
+                    />
+                  </div>
+                )}
+
+                {authError && (
+                  <motion.div
+                    className="modal-error-ms"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <AlertCircle size={12} />
+                    <span>Invalid Authorization Code</span>
+                  </motion.div>
+                )}
+              </div>
+
+              <div className="modal-footer">
+                <button className="modal-btn-cancel" onClick={() => setIsModalOpen(false)}>
+                  Cancel Action
+                </button>
+                <button
+                  className={`${modalMode === 'unlock' ? 'modal-btn-action' : 'modal-btn-lock'}`}
+                  onClick={handleUnlock}
+                >
+                  {modalMode === "unlock" ? "Authorize Access" : "Terminate Access"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
