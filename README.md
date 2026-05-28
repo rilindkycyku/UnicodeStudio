@@ -1,4 +1,4 @@
-# Unicode Studio - Platinum Edition by Rilind Kyçyku
+﻿# Unicode Studio - Platinum Edition by Rilind Kyçyku
 
 Projekti është i tipit **Text Styling** dhe **Unicode Transformation Engine**.
 
@@ -35,3 +35,8 @@ _Shënim: Sigurohuni që keni Node.js të instaluar në sistemin tuaj përpara s
 
 ![](ReadMeImages/pamja.png)
 
+
+
+## Të Drejtat e Autorit (Copyright & License)
+
+Ky projekt është pronë intelektuale e **Rilind Kyçyku**. Nuk lejohet përdorimi, kopjimi, modifikimi apo shpërndarja e këtij kodi pa pëlqimin paraprak dhe miratimin me shkrim nga autori. Çdo përdorim i paautorizuar është rreptësisht i ndaluar.
