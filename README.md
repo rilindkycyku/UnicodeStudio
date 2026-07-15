@@ -1,5 +1,7 @@
 ﻿# Unicode Studio - Platinum Edition by Rilind Kyçyku
 
+![Unicode Studio — Type it once. Style it infinite.](ReadMeImages/montage/hero.png)
+
 Projekti është i tipit **Text Styling** dhe **Unicode Transformation Engine**.
 
 Ky projekt është i punuar në:
@@ -32,6 +34,8 @@ Së pari duhet të bëni **clone** repozitorin dhe pastaj të hapni projektin n�
 _Shënim: Sigurohuni që keni Node.js të instaluar në sistemin tuaj përpara se të filloni._
 
 ## Pamja e Unicode Studio
+
+![Pick a style. Watch it render live.](ReadMeImages/montage/showcase.png)
 
 ![](ReadMeImages/pamja.png)
 
