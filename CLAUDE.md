@@ -28,8 +28,18 @@ npm run preview
 npm run lint      # eslint . — flat config in eslint.config.js
 ```
 
-There is **no test suite**. Run `npm run lint` and verify in a browser before committing; say what
-you checked in the commit body.
+There is **no test suite**, and `npm run build` succeeds.
+
+**`npm run lint` currently exits 1 with 3 pre-existing errors**, so it is not a clean gate — don't
+read a red run as something you broke:
+
+- `src/App.jsx:2` and `src/components/Footer.jsx:1` — `'motion' is defined but never used`
+  (`no-unused-vars`); Framer Motion is imported in both files and used in neither.
+- `src/App.jsx:82` — `react-hooks/set-state-in-effect`, the four `setState` calls in the mount
+  effect that load `localStorage`.
+
+Fixing them is a reasonable small cleanup. What matters is not adding a fourth, and saying in the
+commit body which state you left lint in.
 
 `.env.example` documents one variable:
 
@@ -88,8 +98,16 @@ category name creates a new collapsible group for free. `toSansBold` is kept as 
 | `studio_unlocked` | Which library templates have been unlocked |
 | `studio_lib_state` | Whether the library as a whole is unlocked |
 
-Each is loaded once on mount and written back by its own `useEffect`. Reads are wrapped so a
-corrupt value falls back to an empty default — keep that guard when adding a key.
+Each is loaded once on mount, and each is written back by its own `useEffect` keyed on its own
+state.
+
+Be careful about what the read actually guards. It is
+`JSON.parse(localStorage.getItem('studio_history') || '[]')` — the `|| '[]'` supplies a default only
+when the key is **missing**. A key that exists but holds invalid JSON makes `JSON.parse` throw
+inside the mount effect, and there is no `try`/`catch` and no error boundary in this app, so the
+screen goes blank. Nothing writes a corrupt value today, but a half-finished write or a hand-edited
+devtools entry would. If you touch this code, wrapping the four reads is the fix — don't describe
+the current `||` as protection it doesn't give.
 
 ### 3. The lock is a convenience gate, not security
 
