@@ -13,9 +13,6 @@ export default function Footer() {
                     <p className="copyright">
                         &copy; {new Date().getFullYear()} <span className="brand-name">Unicode Studio</span>
                     </p>
-                    <p className="owner">
-                        Produkt i <span className="company-name">BESA NJË SH.P.K.</span>
-                    </p>
                 </div>
 
                 <div className="footer-divider" />
