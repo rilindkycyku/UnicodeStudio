@@ -934,17 +934,6 @@ textarea.main-input {
   color: var(--primary);
 }
 
-.owner {
-  font-size: 0.55rem;
-  color: rgba(255, 255, 255, 0.2);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-}
-
-.company-name {
-  color: rgba(255, 255, 255, 0.4);
-}
-
 .footer-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border), transparent);
