@@ -53,14 +53,24 @@ body {
 .overflow-hidden { overflow: hidden; }
 .transition-colors { transition: background-color 0.2s, color 0.2s; }
 
-@media (min-width: 1025px) {
+/*
+ * Studio-ja rri brenda ekranit sapo ekrani është sa një tabletë.
+ *
+ * Kufiri ishte 1025px, pra çdo tabletë — edhe një iPad i kthyer anash, që është
+ * saktësisht 1024 — merrte pamjen e telefonit: tri panelat njëri mbi tjetrin,
+ * një kolonë në mes, dhe gjysma e gjerësisë bosh. Nga 768px e tutje faqja mban
+ * shtyllën anësore krah hapësirës së punës, ashtu si te kompjuteri.
+ */
+@media (min-width: 768px) and (min-height: 37.5rem) {
   body {
     height: 100vh;
     overflow: hidden;
   }
 }
 
-@media (max-width: 1024px) {
+/* Telefoni — i drejtë, ose i kthyer anash. Një ekran 844×390 e kalon kufirin e
+   gjerësisë dhe prapë nuk ka lartësi për tri panele pa rrëshqitje. */
+@media (max-width: 767px), (max-height: 37.4375rem) {
   body {
     overflow-y: auto;
   }
@@ -112,7 +122,7 @@ body {
   margin: 0 auto;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 767px), (max-height: 37.4375rem) {
   .app-container {
     grid-template-columns: 1fr;
     height: auto;
@@ -135,10 +145,19 @@ body {
   height: 100%;
 }
 
-@media (max-width: 1024px) {
+/* Te telefoni shtylla bie mbi punën, prandaj i vihet një lartësi: pa të, lista
+   e stileve do ta shtynte fushën e shkrimit nën fund të ekranit. */
+@media (max-width: 767px), (max-height: 37.4375rem) {
   .sidebar {
     height: 350px;
     min-height: 350px;
+  }
+}
+
+/* Te tableta shtylla është përsëri shtyllë, vetëm më e ngushtë se te kompjuteri. */
+@media (min-width: 768px) and (max-width: 1099px) {
+  .app-container {
+    grid-template-columns: 240px 1fr;
   }
 }
 
@@ -224,7 +243,7 @@ body {
   min-height: 0;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 767px), (max-height: 37.4375rem) {
   .main-workspace {
     height: auto;
     display: flex;
@@ -240,10 +259,22 @@ body {
   min-height: 0;
 }
 
-@media (max-width: 1024px) {
+/*
+ * Shkrimi dhe rezultati rrinë krah për krah vetëm kur të dyja kanë gjerësi.
+ *
+ * Nën 1100px ata dalin njëri mbi tjetrin edhe te tableta: dy fusha teksti nga
+ * 350px secila nuk lexohen më mirë se një e vetme sa tërë gjerësia, dhe kjo
+ * faqe shkruan shqip — fjalët janë të gjata.
+ */
+@media (max-width: 1099px) {
   .editor-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+}
+
+@media (max-width: 767px), (max-height: 37.4375rem) {
+  .editor-grid {
     height: auto;
   }
 }
@@ -340,7 +371,7 @@ body {
   height: 100%;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1099px) {
   .editor-pod {
     min-height: 250px;
   }
@@ -369,7 +400,7 @@ textarea.main-input {
   flex-direction: column;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1099px) {
   .preview-pod {
     min-height: 250px;
   }
