@@ -1,6 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/**
+ * Dy tema, dhe vetëm njëra rri e shkruar me vlera.
+ *
+ * Studio-ja u shkrua e errët — «Platinum» — dhe ajo mbetet parazgjedhja: kjo faqe
+ * hapet nga dikush që shkruan reklama natën, dhe një ekran i bardhë atëherë është
+ * një llambë në fytyrë. Por e njëjta adresë hapet edhe në mesditë, dhe atje e
+ * errëta lexohet keq nën dritë të fortë; prandaj drita rri një prekje larg.
+ *
+ * Çelësi i vërtetë janë dy tokena bojë, e jo dy palë ngjyra: sipërfaqet e kësaj
+ * faqeje ndërtohen me mbivendosje të tejdukshme — `rgba(255,255,255,0.05)` mbi një
+ * sfond të errët i ndriçon ato pak. Te drita e njëjta mbivendosje duhet të errësojë,
+ * përndryshe një kartelë e bardhë mbi të bardhë humbet fare. Prandaj `--ink` mban
+ * vetëm tri numrat e ngjyrës, dhe çdo mbivendosje shkruhet `rgba(var(--ink), α)`:
+ * duke e ndërruar atë token, të gjitha sipërfaqet ndërrojnë kah njëherësh.
+ *
+ * `--shadow-ink` rri i errët te të dyja: hija është mungesë drite, jo ngjyrë teme.
+ */
 :root {
+  /* Boja që ndërton sipërfaqet — e bardhë mbi terr, e errët mbi dritë. */
+  --ink: 255, 255, 255;
+  --shadow-ink: 0, 0, 0;
+  /* Boja mbi mbushje të plota (smeraldi, e bardha e butonave të përmbysur). */
+  --on-solid: #05070a;
+  --invert-bg: #ffffff;
+  --invert-ink: #05070a;
+
   --bg-deep: #05070a;
   --bg-card: rgba(10, 12, 16, 0.8);
   --primary: #10b981;
@@ -9,11 +34,61 @@
   --accent: #8b5cf6;
   --text-primary: #ffffff;
   --text-secondary: #94a3b8;
-  --border: rgba(255, 255, 255, 0.06);
+  --border: rgba(var(--ink), 0.06);
+
+  /* Sipërfaqe të ulura — te terri janë hije, te drita janë bojë e lehtë. */
+  --gropa-lehte: rgba(var(--shadow-ink), 0.2);
+  --gropa-mesme: rgba(var(--shadow-ink), 0.3);
+  --gropa-thelle: rgba(var(--shadow-ink), 0.4);
+  /* Smeraldi i dytë: shoqëruesi i `--primary` te kalimet. */
+  --primary-2: #0db179;
+  /* Teksti i daljes rrjedh mes këtyre dyve. */
+  --dalja-1: #10b981;
+  --dalja-2: #34d399;
+  /* E kuqja e tekstit (fshirja, gabimi) — mbushjet e kuqe rrinë si janë. */
+  --rrezik: #f87171;
   --radius-xl: 24px;
   --radius-lg: 16px;
   --radius-md: 10px;
   --font-main: 'Outfit', sans-serif;
+}
+
+/**
+ * Drita — zgjedhje, jo sistem.
+ *
+ * Atributi vihet te `<html>` nga një skriptë bllokuese te `index.html`, para se
+ * React-i të vizatojë: pa të, kush e ka zgjedhur dritën do ta shihte një çast
+ * ekranin e zi te çdo hapje.
+ *
+ * Smeraldi errësohet (`#047857` në vend të `#10b981`): ai i çeltë del 2.5:1 mbi të
+ * bardhën, pra nuk lexohet as si tekst as si kufi. Boja mbi të bëhet e bardhë, dhe
+ * kontrasti del 5.5:1.
+ */
+:root[data-tema='drite'] {
+  --ink: 15, 23, 42;
+  --on-solid: #ffffff;
+  --invert-bg: #0f172a;
+  --invert-ink: #ffffff;
+
+  --bg-deep: #eef2f7;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --primary: #047857;
+  --primary-glow: rgba(4, 120, 87, 0.35);
+  --secondary: #1d4ed8;
+  --accent: #6d28d9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border: rgba(var(--ink), 0.12);
+
+  --gropa-lehte: rgba(var(--ink), 0.03);
+  --gropa-mesme: rgba(var(--ink), 0.04);
+  --gropa-thelle: rgba(var(--ink), 0.05);
+  --primary-2: #065f46;
+  --dalja-1: #047857;
+  --dalja-2: #065f46;
+  --rrezik: #b91c1c;
+
+  color-scheme: light;
 }
 
 * {
@@ -167,7 +242,7 @@ body {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 8px 32px 0 rgba(var(--shadow-ink), 0.37);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -201,7 +276,7 @@ body {
   left: -100%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(45deg, transparent 45%, rgba(255,255,255, 0.03) 50%, transparent 55%);
+  background: linear-gradient(45deg, transparent 45%, rgba(var(--ink), 0.03) 50%, transparent 55%);
   animation: sweep 8s infinite linear;
   pointer-events: none;
   z-index: 5;
@@ -286,7 +361,7 @@ body {
   align-items: center;
   gap: 1rem;
   padding: 1.5rem 1.25rem;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.03), transparent);
+  background: linear-gradient(to bottom, rgba(var(--ink), 0.03), transparent);
   border-bottom: 1px solid var(--border);
 }
 
@@ -298,7 +373,7 @@ body {
   background: white;
   padding: 6px;
   box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.3),
+    0 8px 20px rgba(var(--shadow-ink), 0.3),
     0 0 10px rgba(16, 185, 129, 0.1);
   display: flex;
   align-items: center;
@@ -309,13 +384,56 @@ body {
 
 .logo-wrapper:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 25px rgba(var(--shadow-ink), 0.5);
 }
 
 .brand-logo {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/*
+ * Butoni i temës rri te kreu i shiritit anësor, i shtyrë djathtas me `margin-left: auto`:
+ * është zgjedhje që bëhet një herë, prandaj nuk i merr vendin asnjë kontrolli të punës.
+ */
+.theme-toggle {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(var(--ink), 0.05);
+  border: 1px solid rgba(var(--ink), 0.14);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-toggle:hover {
+  background: rgba(var(--ink), 0.1);
+  transform: translateY(-1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Emri për lexuesat e ekranit — ikona vetëm nuk thotë asgjë. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .brand-text {
@@ -328,14 +446,14 @@ body {
 .brand-main {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #3b82f6; /* More vibrant, readable blue */
+  color: var(--secondary);
   letter-spacing: -0.025em;
 }
 
 .brand-sub {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #94a3b8; /* Cleaner slate gray */
+  color: var(--text-secondary);
   letter-spacing: 0.35em;
   text-transform: uppercase;
   margin-top: 2px;
@@ -382,7 +500,7 @@ textarea.main-input {
   background: transparent;
   border: none;
   padding: 1.25rem;
-  color: #fff;
+  color: var(--text-primary);
   font-family: var(--font-main);
   font-size: 1.15rem;
   font-weight: 400;
@@ -395,7 +513,7 @@ textarea.main-input {
 
 /* --- RESULT DISPLAY --- */
 .preview-pod {
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--gropa-thelle);
   display: flex;
   flex-direction: column;
 }
@@ -421,7 +539,7 @@ textarea.main-input {
 }
 
 .output-area div {
-  background: linear-gradient(90deg, #10b981 0%, #34d399 50%, #10b981 100%);
+  background: linear-gradient(90deg, var(--dalja-1) 0%, var(--dalja-2) 50%, var(--dalja-1) 100%);
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
@@ -433,11 +551,58 @@ textarea.main-input {
   to { background-position: 200% center; }
 }
 
+/*
+ * Kutia e daljes pa tekst: më parë ishte një kuti e zbrazët me një fjali. Tani e
+ * vizaton vetë stilin e zgjedhur mbi një emër të shkurtër — kështu përdoruesi e sheh
+ * se çka do të marrë para se të shkruajë, dhe ndërrimi i stilit ka përgjigje edhe me
+ * fushën bosh. `color` vendoset këtu sepse `.output-area div` ia pret ngjyrën tekstit
+ * për kalimin e gjallë; shembulli nuk rrjedh.
+ */
+.output-sample {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: inherit;
+  animation: none;
+}
+
+.output-sample__tag {
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  opacity: 0.55;
+}
+
+.output-sample__text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary);
+  opacity: 0.55;
+  word-break: break-word;
+}
+
+.output-sample__hint {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
 
 /* --- FOOTER & ACTION AREA --- */
 .panel-footer {
   padding: 0.85rem 1.25rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--gropa-mesme);
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -449,7 +614,7 @@ textarea.main-input {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(var(--ink), 0.3);
   font-size: 0.65rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -466,8 +631,8 @@ textarea.main-input {
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(var(--ink), 0.03);
+  border: 1px solid rgba(var(--ink), 0.05);
   border-radius: 100px;
   font-size: 9px;
   font-weight: 900;
@@ -488,10 +653,10 @@ textarea.main-input {
 .copy-btn-xl {
   flex: 1;
   height: 60px;
-  background: linear-gradient(135deg, var(--primary) 0%, #0db179 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
   border: none;
   border-radius: 16px;
-  color: #000;
+  color: var(--on-solid);
   font-family: var(--font-main);
   font-weight: 900;
   font-size: 1.1rem;
@@ -532,7 +697,7 @@ textarea.main-input {
   padding: 0 0.85rem;
   height: 44px;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px -1px rgba(var(--shadow-ink), 0.1);
 }
 
 .search-field:focus-within {
@@ -550,7 +715,7 @@ textarea.main-input {
   border: none;
   height: 100%;
   padding: 0 1rem;
-  color: #fff;
+  color: var(--text-primary);
   font-family: var(--font-main);
   font-size: 0.95rem;
   font-weight: 600;
@@ -580,7 +745,7 @@ textarea.main-input {
   display: flex;
   align-items: center;
   gap: 3px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--ink), 0.03);
   padding: 2px 6px;
   border-radius: 6px;
   border: 1px solid var(--border);
@@ -611,12 +776,12 @@ textarea.main-input {
 
 .clear-search-btn:hover {
   background: var(--primary);
-  color: #000;
+  color: var(--on-solid);
 }
 
 /* --- STYLE ROW CHIPS --- */
 .style-row-chip {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--ink), 0.02);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.4rem 0.6rem;
@@ -629,8 +794,8 @@ textarea.main-input {
 }
 
 .style-row-chip:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--ink), 0.04);
+  border-color: rgba(var(--ink), 0.1);
 }
 
 .style-row-chip.active {
@@ -645,7 +810,8 @@ textarea.main-input {
   text-transform: uppercase;
   color: var(--text-secondary);
   letter-spacing: 0.05em;
-  opacity: 0.5;
+  /* Ky është emri i vetëm i butonit; nën 0.75 nuk lexohej te asnjëra temë. */
+  opacity: 0.75;
 }
 
 .style-row-chip.active .name {
@@ -656,11 +822,11 @@ textarea.main-input {
 .style-row-chip .preview {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .style-row-chip.active .preview {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* --- CATEGORY GROUP --- */
@@ -673,7 +839,7 @@ textarea.main-input {
 }
 
 .category-trigger {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--ink), 0.02);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.5rem 0.75rem;
@@ -687,8 +853,8 @@ textarea.main-input {
 }
 
 .category-trigger:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--ink), 0.04);
+  border-color: rgba(var(--ink), 0.1);
 }
 
 .category-trigger.expanded {
@@ -703,17 +869,17 @@ textarea.main-input {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(var(--ink), 0.3);
   transition: all 0.3s;
 }
 
 .category-trigger:hover span, .category-trigger.expanded span {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--ink), 0.6);
   letter-spacing: 0.2em;
 }
 
 .category-trigger .icon {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(var(--ink), 0.2);
   transition: all 0.3s;
 }
 
@@ -752,7 +918,7 @@ textarea.main-input {
 
 .btn-emerald:hover:not(:disabled) {
   background: var(--primary);
-  color: #000;
+  color: var(--on-solid);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
@@ -764,7 +930,7 @@ textarea.main-input {
   gap: 0.6rem;
   padding: 0.45rem 1rem;
   background: var(--primary);
-  color: #000;
+  color: var(--on-solid);
   border-radius: 10px;
   border: none;
   font-size: 0.7rem;
@@ -796,8 +962,8 @@ textarea.main-input {
   bottom: 0.75rem;
   right: 0.75rem;
   padding: 0.85rem 1.5rem;
-  background: #fff;
-  color: #000;
+  background: var(--invert-bg);
+  color: var(--invert-ink);
   border-radius: 14px;
   border: none;
   display: flex;
@@ -809,7 +975,7 @@ textarea.main-input {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   cursor: pointer;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(var(--shadow-ink), 0.4);
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -823,7 +989,7 @@ textarea.main-input {
 
 .btn-copy-floating:hover {
   background: var(--primary);
-  color: #000;
+  color: var(--on-solid);
   transform: scale(1.05) translateY(-2px);
   box-shadow: 0 25px 50px rgba(16, 185, 129, 0.3);
 }
@@ -834,7 +1000,7 @@ textarea.main-input {
 
 .btn-red {
   background: rgba(239, 68, 68, 0.1);
-  color: #f87171;
+  color: var(--rrezik);
   border-color: rgba(239, 68, 68, 0.2);
 }
 
@@ -852,7 +1018,7 @@ textarea.main-input {
 }
 
 .tpl-card {
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(var(--ink), 0.015);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 0.85rem 1rem;
@@ -866,7 +1032,7 @@ textarea.main-input {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+  background: linear-gradient(45deg, transparent, rgba(var(--ink), 0.03), transparent);
   transform: translateX(-100%);
   transition: transform 0.6s;
 }
@@ -876,10 +1042,10 @@ textarea.main-input {
 }
 
 .tpl-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--ink), 0.04);
+  border-color: rgba(var(--ink), 0.2);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px -5px rgba(var(--shadow-ink), 0.3);
 }
 
 .tpl-card.active {
@@ -891,7 +1057,7 @@ textarea.main-input {
 .tpl-card h4 {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .tpl-card p {
@@ -905,14 +1071,14 @@ textarea.main-input {
   overflow: hidden;
 }
 .tpl-card.locked {
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(var(--ink), 0.01);
   border-style: dashed;
   opacity: 0.8;
 }
 
 .tpl-card.locked:hover {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(var(--ink), 0.02);
+  border-color: rgba(var(--ink), 0.3);
 }
 
 .tpl-card p.blur-text {
@@ -932,7 +1098,7 @@ textarea.main-input {
 /* --- SCROLLBARS --- */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(var(--ink), 0.1); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
 /* --- FOOTER COMPACT STYLES --- */
@@ -942,7 +1108,7 @@ textarea.main-input {
 }
 
 .footer-content {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--ink), 0.02);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0.75rem;
@@ -957,7 +1123,7 @@ textarea.main-input {
   font-size: 0.6rem;
   font-weight: 800;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--ink), 0.5);
   margin-bottom: 0.15rem;
 }
 
@@ -973,7 +1139,7 @@ textarea.main-input {
 
 .footer-dev {
   font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(var(--ink), 0.3);
 }
 
 .dev-link {
@@ -984,7 +1150,7 @@ textarea.main-input {
 }
 
 .dev-link:hover {
-  color: #fff;
+  color: var(--text-primary);
   text-shadow: 0 0 10px var(--primary-glow);
 }
 
@@ -1002,7 +1168,7 @@ body::after {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(var(--shadow-ink), 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
   background-size: 100% 2px, 3px 100%;
   pointer-events: none;
   z-index: 999;
@@ -1090,13 +1256,13 @@ body::after {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .vault-content p {
   font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(var(--ink), 0.3);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1104,8 +1270,8 @@ body::after {
 }
 
 .vault-unlock-btn {
-  background: #fff;
-  color: #000;
+  background: var(--invert-bg);
+  color: var(--invert-ink);
   border: none;
   padding: 0.85rem 2rem;
   border-radius: 100px;
@@ -1116,7 +1282,7 @@ body::after {
   letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(var(--shadow-ink), 0.4);
 }
 
 .vault-unlock-btn:hover {
@@ -1142,7 +1308,7 @@ body::after {
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(var(--shadow-ink), 0.4);
   backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
 }
@@ -1151,13 +1317,13 @@ body::after {
   width: 100%;
   max-width: 440px;
   background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(var(--ink), 0.08);
   border-radius: var(--radius-xl);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   box-shadow: 
-    0 30px 60px -12px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
+    0 30px 60px -12px rgba(var(--shadow-ink), 0.5),
+    0 0 0 1px rgba(var(--ink), 0.05);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -1166,7 +1332,7 @@ body::after {
 
 .modal-header {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(var(--ink), 0.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1181,7 +1347,7 @@ body::after {
 .modal-close {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(var(--ink), 0.2);
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 8px;
@@ -1189,8 +1355,8 @@ body::after {
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+  background: rgba(var(--ink), 0.05);
+  color: var(--text-primary);
 }
 
 .modal-body {
@@ -1201,7 +1367,7 @@ body::after {
 .modal-body h3 {
   font-size: 1.4rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
 }
@@ -1215,8 +1381,8 @@ body::after {
 
 .modal-input-group {
   position: relative;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--gropa-lehte);
+  border: 1px solid rgba(var(--ink), 0.05);
   border-radius: 14px;
   padding: 0 1.25rem;
   height: 56px;
@@ -1236,7 +1402,7 @@ body::after {
   background: transparent;
   border: none;
   height: 100%;
-  color: #fff;
+  color: var(--text-primary);
   font-family: var(--font-main);
   font-size: 0.85rem;
   font-weight: 700;
@@ -1246,14 +1412,14 @@ body::after {
 }
 
 .modal-input-group input::placeholder {
-  color: rgba(255, 255, 255, 0.15);
+  color: rgba(var(--ink), 0.15);
   letter-spacing: 0.1em;
   font-weight: 500;
 }
 
 .modal-error-ms {
   margin-top: 1rem;
-  color: #f87171;
+  color: var(--rrezik);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1284,21 +1450,21 @@ body::after {
 }
 
 .modal-btn-cancel {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(var(--ink), 0.08);
+  border: 1px solid rgba(var(--ink), 0.05);
+  color: rgba(var(--ink), 0.7);
 }
 
 .modal-btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: rgba(var(--ink), 0.12);
+  color: var(--text-primary);
   transform: translateY(-2px);
 }
 
 .modal-btn-action {
   background: var(--primary);
   border: none;
-  color: #000;
+  color: var(--on-solid);
   box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
 }
 

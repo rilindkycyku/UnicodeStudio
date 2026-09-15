@@ -8,6 +8,30 @@
   <title>Unicode Studio - Platinum Edition</title>
   <meta name="description"
     content="Professional Unicode Text Styler for Social Media. Support for Sans Bold, Mono, Bubbles and more." />
+  <meta name="theme-color" content="#05070a" />
+
+  <!--
+    Tema vendoset para se React-i të vizatojë.
+
+    Kjo skriptë është e zakonshme dhe bllokuese me qëllim: po ta bënte App.jsx-ja —
+    modul, pra i shtyrë — faqja do të ndizej një çast e zezë para se të kalonte te
+    drita. Prandaj atributi shkruhet këtu, mbi <html>, para se të vijë stili.
+
+    Mos i shto `defer`, mos e bëj modul dhe mos e zhvendos pas `theme-color`-it që e lexon.
+  -->
+  <script>
+    (function () {
+      var tema = 'terr';
+      try {
+        if (localStorage.getItem('studio_theme') === 'drite') tema = 'drite';
+      } catch (e) {
+        /* localStorage i bllokuar (dritare private) — mbetet terri */
+      }
+      document.documentElement.setAttribute('data-tema', tema);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', tema === 'drite' ? '#eef2f7' : '#05070a');
+    })();
+  </script>
 </head>
 
 <body>

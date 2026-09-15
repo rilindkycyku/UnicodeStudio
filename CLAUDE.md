@@ -89,17 +89,18 @@ contains, grouped by its `category` (`Sans`, `Decorative`, `Monospace`, `Experim
 category name creates a new collapsible group for free. `toSansBold` is kept as an alias of
 `toUnicodeStyle` for backward compatibility.
 
-### 2. Everything persists to `localStorage`, under four keys
+### 2. Everything persists to `localStorage`, under five keys
 
-| Key | Holds |
-|---|---|
-| `studio_history` | Recently converted text |
-| `studio_custom` | Templates the user wrote themselves |
-| `studio_unlocked` | Which library templates have been unlocked |
-| `studio_lib_state` | Whether the library as a whole is unlocked |
+| Key | Holds | Shape |
+|---|---|---|
+| `studio_history` | Recently converted text | JSON |
+| `studio_custom` | Templates the user wrote themselves | JSON |
+| `studio_unlocked` | Which library templates have been unlocked | JSON |
+| `studio_lib_state` | Whether the library as a whole is unlocked | JSON |
+| `studio_theme` | The chosen theme — `terr` or `drite` | plain string |
 
-Each is loaded once on mount, and each is written back by its own `useEffect` keyed on its own
-state.
+The first four are loaded once on mount, and each is written back by its own `useEffect` keyed on
+its own state. `studio_theme` is the exception on purpose — see rule 5.
 
 Be careful about what the read actually guards. It is
 `JSON.parse(localStorage.getItem('studio_history') || '[]')` — the `|| '[]'` supplies a default only
@@ -128,6 +129,46 @@ them, so reusing an id unlocks the wrong template on someone's machine.
 `SOCIAL_LIMITS` in `App.jsx` (FB Post 250, FB Ad 125, Instagram 2200) drives the character counter.
 `MOCKUP_TEMPLATES` is Lorem-ipsum placeholder shown before the library is unlocked — it is not real
 content.
+
+### 5. Two themes, and the choice is applied before React paints
+
+Dark ("Platinum") is still the default: this is a tool people open at night to write posts, and a
+white screen then is a lamp in the face. Light is one tap away, on the toggle in the sidebar header.
+
+**`studio_theme` is read by a blocking script in `index.html`, not by React.** `main.jsx` is a
+module, so it is deferred — if the attribute were set from `App.jsx`, anyone who chose light would
+see a black flash on every load. So the script sets `data-tema` on `<html>` (and the initial
+`<meta name="theme-color">`) before the stylesheet is applied. **Don't add `defer`, don't make it a
+module, and don't move it above the `theme-color` meta it reads.** It writes a plain string, not
+JSON, and it is wrapped in `try`/`catch` — a blocked `localStorage` (private window) must not stop
+the page from rendering. `App.jsx` seeds its `tema` state *from the attribute*, so React and what
+the eye sees start from the same value.
+
+The palette is **not two sets of colours**. The surfaces here are translucent overlays —
+`rgba(255,255,255,0.05)` lightens a dark card, and the same overlay must *darken* a light one, or a
+white card on white disappears. So `--ink` holds only the three colour numbers, every overlay is
+written `rgba(var(--ink), α)`, and `:root[data-tema='drite']` flips the direction of all of them at
+once. `--shadow-ink` stays dark in both: a shadow is missing light, not a theme colour. Recessed
+surfaces go through `--gropa-lehte/-mesme/-thelle`, which are shadow-tinted in dark and ink-tinted
+in light.
+
+Emerald darkens in light (`#047857`, not `#10b981`) — the bright one is 2.5:1 on white and reads as
+neither text nor border. The same applies to the red (`--rrezik`) and to the output gradient
+(`--dalja-1/-2`). If you add a colour, add it as a token in both blocks; don't hardcode a hex that
+only works on black. The only literals left are `#fff` on solid red fills, which works either way.
+
+### 6. The sidebar and the preview adapt to the width
+
+Two small pieces of behaviour that are easy to undo by accident:
+
+- **Above 1400px all style categories open.** `GJERESIA_E_HAPUR` in `App.jsx` drives it — the
+  initial `expandedCategories` and a `matchMedia` listener. On a wide screen the sidebar has room
+  for all four groups, and making someone click to see the styles is pure friction. The listener
+  only ever *opens*: narrowing the window closes nothing, because collapsing is the user's choice.
+- **The empty preview draws the selected style.** It used to be an empty box with "Generator ready
+  for input"; now it renders `SHEMBULLI` through the current style, so switching styles has an
+  answer even with the input empty. `.output-sample` has to reset `background`/`background-clip`/
+  `color`: `.output-area div` clips a running gradient to the text, and the sample must not stream.
 
 ## Gotchas
 
