@@ -21,7 +21,9 @@ import {
   Lock,
   Unlock,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { toUnicodeStyle, availableStyles } from './utils/textConverter';
 import templatesData from './data/templates.json';
@@ -34,6 +36,13 @@ const SOCIAL_LIMITS = [
   { name: 'FB Ad', limit: 125, color: 'text-blue-400' },
   { name: 'Insta', limit: 2200, color: 'text-purple-400' }
 ];
+
+// Mbi këtë gjerësi shiriti anësor i nxë të katër kategoritë njëherësh, prandaj
+// hapen të gjitha: në një ekran të gjerë klikimi për të parë stilet është punë kot.
+const GJERESIA_E_HAPUR = '(min-width: 1400px)';
+
+// Teksti që vizaton vetë stilin te kutia e daljes derisa përdoruesi s'ka shkruar ende.
+const SHEMBULLI = 'Besa Market';
 
 const MOCKUP_TEMPLATES = [
   { id: 'm1', title: 'Creative Draft', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
@@ -50,7 +59,16 @@ export default function App() {
   // Local Storage States
   const [history, setHistory] = useState([]);
   const [myTemplates, setMyTemplates] = useState([]);
-  const [expandedCategories, setExpandedCategories] = useState(['Sans']);
+  const [expandedCategories, setExpandedCategories] = useState(() =>
+    window.matchMedia(GJERESIA_E_HAPUR).matches
+      ? [...new Set(availableStyles.map(s => s.category))]
+      : ['Sans']
+  );
+  // Nisja vjen nga atributi që e ka vendosur skripta bllokuese te index.html, jo nga
+  // localStorage: kështu React-i dhe ajo që sheh syri nisin nga e njëjta vlerë.
+  const [tema, setTema] = useState(
+    () => (document.documentElement.getAttribute('data-tema') === 'drite' ? 'drite' : 'terr')
+  );
   const [isLibraryUnlocked, setIsLibraryUnlocked] = useState(false);
   const [unlockedTemplates, setUnlockedTemplates] = useState([]);
   const [modalMode, setModalMode] = useState("unlock"); // "unlock" | "lock"
@@ -72,6 +90,29 @@ export default function App() {
       prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
     );
   };
+
+  // Tema: atributi, ruajtja dhe ngjyra e shiritit të shfletuesit rrjedhin nga një gjendje e vetme.
+  useEffect(() => {
+    document.documentElement.setAttribute('data-tema', tema);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', tema === 'drite' ? '#eef2f7' : '#05070a');
+    try {
+      localStorage.setItem('studio_theme', tema);
+    } catch {
+      /* dritare private — tema vlen sa mban faqja hapur */
+    }
+  }, [tema]);
+
+  // Kur dritarja bëhet e gjerë hapen të gjitha kategoritë; kur ngushtohet nuk mbyllet
+  // asnjë — mbyllja është zgjedhje e përdoruesit dhe nuk ia marrim ne.
+  useEffect(() => {
+    const gjere = window.matchMedia(GJERESIA_E_HAPUR);
+    const ndrysho = () => {
+      if (gjere.matches) setExpandedCategories([...new Set(availableStyles.map(s => s.category))]);
+    };
+    gjere.addEventListener('change', ndrysho);
+    return () => gjere.removeEventListener('change', ndrysho);
+  }, []);
 
   // Initialization
   useEffect(() => {
@@ -113,6 +154,7 @@ export default function App() {
   }, [allTemplates, searchTerm]);
 
   const convertedText = useMemo(() => toUnicodeStyle(inputText, selectedStyle), [inputText, selectedStyle]);
+  const shembulliIStilit = useMemo(() => toUnicodeStyle(SHEMBULLI, selectedStyle), [selectedStyle]);
 
   const handleCopy = () => {
     if (!convertedText) return;
@@ -194,6 +236,16 @@ export default function App() {
                 <h1 className="brand-main">Unicode</h1>
                 <h1 className="brand-sub">Studio</h1>
               </div>
+
+              <button
+                className="theme-toggle"
+                onClick={() => setTema(t => (t === 'drite' ? 'terr' : 'drite'))}
+                aria-pressed={tema === 'drite'}
+                title={tema === 'drite' ? 'Switch to dark' : 'Switch to light'}
+              >
+                {tema === 'drite' ? <Moon size={16} /> : <Sun size={16} />}
+                <span className="sr-only">{tema === 'drite' ? 'Switch to dark' : 'Switch to light'}</span>
+              </button>
             </div>
 
             <div className="scroller">
@@ -465,9 +517,10 @@ export default function App() {
                       {convertedText}
                     </motion.div>
                   ) : (
-                    <div className="h-full flex flex-col items-center justify-center opacity-10 text-center space-y-4">
-                      <Sparkles size={48} />
-                      <p className="font-light italic text-xl">Generator ready for input</p>
+                    <div className="output-sample">
+                      <span className="output-sample__tag">Preview</span>
+                      <p className="output-sample__text">{shembulliIStilit}</p>
+                      <p className="output-sample__hint">Start typing to style your own text</p>
                     </div>
                   )}
                 </AnimatePresence>
